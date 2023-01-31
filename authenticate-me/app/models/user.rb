@@ -20,7 +20,6 @@ class User < ApplicationRecord
 
   before_validation :ensure_session_token
 
-  private
   def generate_unique_session_token
     while true 
       token = SecureRandom.urlsafe_base64
@@ -35,11 +34,12 @@ class User < ApplicationRecord
   def reset_session_token!
       self.session_token = generate_unique_session_token
       self.save!
-      session_token
+      self.session_token
   end
 
   def self.find_by_credentials(credential, password)
-    user = User.find_by(username: credential.username, email: credential.email)
+    debugger
+    user = User.find_by(username: credential[:username], email: credential[:email])
 
     if user&.authenticate(password)
       return user
