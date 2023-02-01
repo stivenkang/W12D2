@@ -38,15 +38,13 @@ class User < ApplicationRecord
   end
 
   def self.find_by_credentials(credential, password)
+    user = User.find_by(username: credential) || User.find_by(email: credential)
     debugger
-    user = User.find_by(username: credential[:username], email: credential[:email])
-
     if user&.authenticate(password)
       return user
     else 
       nil
     end
-
   end
-
+  
 end

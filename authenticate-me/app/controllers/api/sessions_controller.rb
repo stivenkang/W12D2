@@ -1,4 +1,7 @@
 class Api::SessionsController < ApplicationController
+  before_action :require_logged_in, only: [:create]
+  before_action :require_logged_in, only: [:destroy]
+
   def show
     @user = current_user
     if @user
@@ -9,12 +12,9 @@ class Api::SessionsController < ApplicationController
   end
 
   def create
-    username = params[:username]
-    email = params[:email]
-    credential = [username: username, email: email]
+    credential = params[:credential]
     password = params[:password]
-    debugger
-
+    # debugger
     @user = User.find_by_credentials(credential, password)
     if @user 
       login!(@user)
@@ -25,7 +25,7 @@ class Api::SessionsController < ApplicationController
   end
 
   def destroy
-    if @user 
+    if current_user
       logout!
       render json: {message: 'success'}
     end
