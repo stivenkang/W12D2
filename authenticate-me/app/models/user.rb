@@ -39,7 +39,6 @@ class User < ApplicationRecord
 
   def self.find_by_credentials(credential, password)
     user = User.find_by(username: credential) || User.find_by(email: credential)
-    debugger
     if user&.authenticate(password)
       return user
     else 
